@@ -1,0 +1,4219 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CivicLens — Policy Decision Support</title>
+
+<style>
+/* =========================================================
+   CIVICLENS — GLOBAL
+========================================================= */
+
+:root {
+    --bg: #f5f7fb;
+    --surface: #ffffff;
+    --surface-2: #f8fafc;
+    --border: #e6eaf0;
+    --text: #172033;
+    --muted: #718096;
+    --primary: #2457e6;
+    --primary-light: #edf3ff;
+    --success: #14966b;
+    --success-light: #eaf9f3;
+    --warning: #d88900;
+    --warning-light: #fff6df;
+    --danger: #d94c5c;
+    --danger-light: #fff0f2;
+    --shadow: 0 8px 30px rgba(22, 34, 58, 0.06);
+    --radius: 16px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+                 "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+#loginPage {
+    min-height: 100vh;
+    display: flex;
+    background:
+        radial-gradient(circle at 10% 10%, rgba(36,87,230,.08), transparent 30%),
+        radial-gradient(circle at 90% 80%, rgba(36,87,230,.08), transparent 30%),
+        #f7f9fc;
+}
+
+.login-left {
+    width: 55%;
+    min-height: 100vh;
+    padding: 70px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-left::before {
+    content: "";
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border: 1px solid rgba(36,87,230,.12);
+    border-radius: 50%;
+    right: -160px;
+    top: -120px;
+}
+
+.login-left::after {
+    content: "";
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border: 1px solid rgba(36,87,230,.08);
+    border-radius: 50%;
+    left: -130px;
+    bottom: -120px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 23px;
+    font-weight: 800;
+    position: relative;
+    z-index: 2;
+}
+
+.brand-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 13px;
+    background: var(--primary);
+    color: white;
+    display: grid;
+    place-items: center;
+    font-weight: 900;
+    box-shadow: 0 8px 20px rgba(36,87,230,.25);
+}
+
+.login-copy {
+    margin-top: 80px;
+    max-width: 650px;
+    position: relative;
+    z-index: 2;
+}
+
+.login-copy h1 {
+    font-size: clamp(42px, 5vw, 68px);
+    line-height: 1.04;
+    letter-spacing: -3px;
+    margin-bottom: 25px;
+}
+
+.login-copy h1 span {
+    color: var(--primary);
+}
+
+.login-copy p {
+    color: var(--muted);
+    font-size: 18px;
+    line-height: 1.7;
+    max-width: 560px;
+}
+
+.feature-list {
+    margin-top: 40px;
+    display: grid;
+    gap: 15px;
+}
+
+.feature {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    color: #364152;
+}
+
+.feature-check {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--success-light);
+    color: var(--success);
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+}
+
+.login-right {
+    width: 45%;
+    display: grid;
+    place-items: center;
+    padding: 40px;
+    background: rgba(255,255,255,.7);
+    border-left: 1px solid var(--border);
+}
+
+.login-card {
+    width: 100%;
+    max-width: 440px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 40px;
+    box-shadow: var(--shadow);
+}
+
+.login-card h2 {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.login-card .subtitle {
+    color: var(--muted);
+    margin-bottom: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 13px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    outline: none;
+    background: #fff;
+    transition: .2s;
+}
+
+.form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(36,87,230,.08);
+}
+
+.login-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 22px;
+}
+
+.btn {
+    border: 0;
+    border-radius: 10px;
+    padding: 12px 17px;
+    font-weight: 700;
+    transition: .2s;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+    width: 100%;
+    padding: 14px;
+    box-shadow: 0 7px 18px rgba(36,87,230,.18);
+}
+
+.btn-secondary {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+}
+
+.demo-box {
+    margin-top: 22px;
+    background: var(--primary-light);
+    border: 1px solid #dbe6ff;
+    border-radius: 12px;
+    padding: 15px;
+    font-size: 13px;
+    color: #405070;
+}
+
+.demo-box strong {
+    color: var(--primary);
+}
+
+/* =========================================================
+   APP SHELL
+========================================================= */
+
+#app {
+    display: none;
+}
+
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background: white;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+}
+
+.sidebar-brand {
+    padding: 24px 20px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.sidebar-brand .brand-icon {
+    width: 38px;
+    height: 38px;
+    font-size: 14px;
+}
+
+.nav {
+    padding: 10px 13px;
+    overflow-y: auto;
+}
+
+.nav-section {
+    font-size: 10px;
+    font-weight: 800;
+    color: #9aa5b5;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    padding: 15px 10px 8px;
+}
+
+.nav-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 0;
+    background: transparent;
+    color: #657083;
+    padding: 11px 12px;
+    border-radius: 10px;
+    margin-bottom: 3px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.nav-item:hover {
+    background: #f5f7fb;
+    color: var(--text);
+}
+
+.nav-item.active {
+    background: var(--primary-light);
+    color: var(--primary);
+}
+
+.nav-icon {
+    width: 20px;
+    text-align: center;
+    font-size: 15px;
+}
+
+.sidebar-bottom {
+    margin-top: auto;
+    padding: 15px;
+    border-top: 1px solid var(--border);
+}
+
+.department {
+    padding: 12px;
+    background: var(--surface-2);
+    border-radius: 11px;
+    margin-bottom: 10px;
+}
+
+.department small {
+    display: block;
+    color: var(--muted);
+    margin-bottom: 4px;
+}
+
+.department strong {
+    font-size: 13px;
+}
+
+.logout {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    color: var(--danger);
+    text-align: left;
+    padding: 10px 12px;
+    font-weight: 700;
+}
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.main {
+    margin-left: 250px;
+    min-height: 100vh;
+}
+
+.topbar {
+    height: 76px;
+    background: rgba(255,255,255,.92);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: blur(12px);
+}
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.icon-btn {
+    width: 38px;
+    height: 38px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: white;
+    display: grid;
+    place-items: center;
+    color: #647084;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 10px;
+}
+
+.avatar {
+    width: 37px;
+    height: 37px;
+    border-radius: 50%;
+    background: var(--primary-light);
+    color: var(--primary);
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+}
+
+.profile-text small {
+    color: var(--muted);
+    display: block;
+    font-size: 10px;
+}
+
+.profile-text strong {
+    font-size: 12px;
+}
+
+.page {
+    padding: 30px;
+    max-width: 1600px;
+    margin: auto;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 25px;
+}
+
+.page-header h1 {
+    font-size: 27px;
+    letter-spacing: -.7px;
+}
+
+.page-header p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+.card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.card-header {
+    padding: 20px 22px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header h3 {
+    font-size: 15px;
+}
+
+.card-body {
+    padding: 22px;
+}
+
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.kpi {
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.kpi-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.kpi-icon {
+    width: 39px;
+    height: 39px;
+    border-radius: 10px;
+    background: var(--primary-light);
+    color: var(--primary);
+    display: grid;
+    place-items: center;
+}
+
+.kpi h2 {
+    font-size: 29px;
+    margin-top: 18px;
+    letter-spacing: -1px;
+}
+
+.kpi p {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.positive {
+    color: var(--success);
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 18px;
+    margin-bottom: 18px;
+}
+
+.chart {
+    height: 250px;
+    position: relative;
+    padding: 20px;
+}
+
+.fake-chart {
+    height: 190px;
+    display: flex;
+    align-items: end;
+    gap: 10px;
+    padding-top: 20px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+}
+
+.fake-chart::before,
+.fake-chart::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    border-top: 1px dashed #e9edf3;
+}
+
+.fake-chart::before { top: 30%; }
+.fake-chart::after { top: 60%; }
+
+.bar {
+    flex: 1;
+    background: linear-gradient(to top, #2457e6, #7da0ff);
+    border-radius: 7px 7px 0 0;
+    position: relative;
+    z-index: 2;
+    min-width: 18px;
+}
+
+.chart-labels {
+    display: flex;
+    gap: 10px;
+    margin-top: 9px;
+}
+
+.chart-labels span {
+    flex: 1;
+    text-align: center;
+    font-size: 10px;
+    color: var(--muted);
+}
+
+.donut-wrap {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    min-height: 230px;
+}
+
+.donut {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: conic-gradient(
+        #2457e6 0 28%,
+        #14966b 28% 50%,
+        #e6a329 50% 68%,
+        #7c5ce0 68% 84%,
+        #ec6b86 84% 94%,
+        #d9dee7 94% 100%
+    );
+    position: relative;
+    flex-shrink: 0;
+}
+
+.donut::after {
+    content: "48.7K";
+    position: absolute;
+    inset: 31px;
+    border-radius: 50%;
+    background: white;
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+    font-size: 18px;
+}
+
+.legend {
+    display: grid;
+    gap: 10px;
+}
+
+.legend-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+}
+
+.dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+}
+
+.suggestion-list {
+    display: grid;
+    gap: 10px;
+}
+
+.suggestion-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    gap: 20px;
+    align-items: center;
+    padding: 17px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: .2s;
+}
+
+.suggestion-row:hover {
+    border-color: #cbd8f8;
+    transform: translateY(-1px);
+}
+
+.suggestion-title {
+    font-weight: 750;
+    font-size: 13px;
+}
+
+.suggestion-meta {
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 5px;
+}
+
+.score {
+    font-size: 19px;
+    font-weight: 850;
+    color: var(--primary);
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 8px;
+    border-radius: 7px;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.badge-green {
+    background: var(--success-light);
+    color: var(--success);
+}
+
+.badge-yellow {
+    background: var(--warning-light);
+    color: var(--warning);
+}
+
+.badge-red {
+    background: var(--danger-light);
+    color: var(--danger);
+}
+
+.badge-blue {
+    background: var(--primary-light);
+    color: var(--primary);
+}
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background: var(--surface-2);
+    color: #788496;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .7px;
+    text-align: left;
+    padding: 13px 15px;
+}
+
+td {
+    padding: 15px;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    vertical-align: middle;
+}
+
+tr:hover td {
+    background: #fbfcfe;
+}
+
+/* =========================================================
+   TOOLBAR
+========================================================= */
+
+.toolbar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+}
+
+.search {
+    flex: 1;
+    min-width: 220px;
+    position: relative;
+}
+
+.search input {
+    width: 100%;
+    padding: 12px 14px 12px 38px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    outline: none;
+    background: white;
+}
+
+.search-icon {
+    position: absolute;
+    left: 13px;
+    top: 11px;
+    color: var(--muted);
+}
+
+/* =========================================================
+   DETAIL
+========================================================= */
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 18px;
+}
+
+.priority-hero {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.priority-number {
+    width: 125px;
+    height: 125px;
+    border-radius: 50%;
+    border: 9px solid #e3ebff;
+    display: grid;
+    place-items: center;
+    color: var(--primary);
+    font-size: 31px;
+    font-weight: 900;
+    flex-shrink: 0;
+}
+
+.priority-info h2 {
+    font-size: 22px;
+}
+
+.priority-info p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 7px;
+}
+
+.factor-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.factor {
+    padding: 15px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.factor small {
+    display: block;
+    color: var(--muted);
+    font-size: 10px;
+}
+
+.factor strong {
+    display: block;
+    font-size: 16px;
+    margin: 6px 0;
+}
+
+.factor span {
+    color: var(--primary);
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.progress {
+    height: 8px;
+    background: #edf0f5;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: var(--primary);
+    border-radius: 10px;
+}
+
+.stance-chart {
+    display: flex;
+    height: 20px;
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+.stance-support { width: 72%; background: #14966b; }
+.stance-oppose { width: 11%; background: #d94c5c; }
+.stance-neutral { width: 17%; background: #cbd2dc; }
+
+.stance-legend {
+    display: grid;
+    gap: 9px;
+}
+
+.stance-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+}
+
+/* =========================================================
+   EVIDENCE
+========================================================= */
+
+.evidence-grid {
+    display: grid;
+    gap: 12px;
+}
+
+.evidence {
+    padding: 17px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.evidence p {
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+.evidence-footer {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* =========================================================
+   STAKEHOLDERS
+========================================================= */
+
+.stakeholder-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+}
+
+.stakeholder {
+    padding: 18px;
+    text-align: center;
+    border: 1px solid var(--border);
+    border-radius: 13px;
+}
+
+.stakeholder-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    background: var(--primary-light);
+    color: var(--primary);
+    display: grid;
+    place-items: center;
+    margin: 0 auto 10px;
+    font-size: 18px;
+}
+
+.stakeholder strong {
+    display: block;
+    font-size: 12px;
+}
+
+.stakeholder span {
+    font-size: 10px;
+    color: var(--muted);
+}
+
+/* =========================================================
+   IMPACT
+========================================================= */
+
+.scenario-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.scenario-tab {
+    padding: 11px 25px;
+    border: 1px solid var(--border);
+    background: white;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 12px;
+}
+
+.scenario-tab.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.impact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.impact-card {
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 13px;
+}
+
+.impact-card h3 {
+    font-size: 14px;
+    margin-bottom: 13px;
+}
+
+.impact-card ul {
+    list-style: none;
+    display: grid;
+    gap: 11px;
+}
+
+.impact-card li {
+    font-size: 12px;
+    line-height: 1.5;
+    color: #596579;
+    padding-left: 18px;
+    position: relative;
+}
+
+.impact-card li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--success);
+    font-weight: 900;
+}
+
+.scenario-estimate {
+    margin-top: 18px;
+    padding: 17px;
+    background: var(--primary-light);
+    border: 1px solid #dce6ff;
+    border-radius: 12px;
+}
+
+.scenario-estimate h3 {
+    font-size: 13px;
+    color: var(--primary);
+    margin-bottom: 7px;
+}
+
+.scenario-estimate p {
+    font-size: 11px;
+    color: #566582;
+}
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+.setting-row {
+    display: grid;
+    grid-template-columns: 1fr 100px;
+    align-items: center;
+    gap: 20px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.setting-row:last-child {
+    border-bottom: 0;
+}
+
+.setting-row strong {
+    font-size: 13px;
+}
+
+.setting-row p {
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 3px;
+}
+
+.weight-input {
+    width: 75px;
+    padding: 9px;
+    text-align: center;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal-bg {
+    position: fixed;
+    inset: 0;
+    background: rgba(15,23,42,.45);
+    backdrop-filter: blur(4px);
+    display: none;
+    place-items: center;
+    z-index: 500;
+    padding: 20px;
+}
+
+.modal {
+    background: white;
+    width: 100%;
+    max-width: 600px;
+    border-radius: 18px;
+    box-shadow: 0 25px 80px rgba(0,0,0,.18);
+    overflow: hidden;
+    animation: modalIn .2s ease;
+}
+
+@keyframes modalIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(.98);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.modal-header {
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+}
+
+.modal-body {
+    padding: 22px;
+}
+
+.modal-footer {
+    padding: 15px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    background: #172033;
+    color: white;
+    padding: 13px 17px;
+    border-radius: 10px;
+    font-size: 12px;
+    display: none;
+    z-index: 1000;
+    box-shadow: 0 10px 30px rgba(0,0,0,.2);
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+.mobile-menu {
+    display: none;
+}
+
+@media(max-width: 1100px) {
+    .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stakeholder-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .factor-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media(max-width: 800px) {
+    .login-left {
+        display: none;
+    }
+
+    .login-right {
+        width: 100%;
+    }
+
+    .sidebar {
+        transform: translateX(-100%);
+        transition: .25s;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .main {
+        margin-left: 0;
+    }
+
+    .mobile-menu {
+        display: grid;
+        place-items: center;
+    }
+
+    .dashboard-grid,
+    .detail-grid,
+    .impact-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .page {
+        padding: 20px 15px;
+    }
+
+    .topbar {
+        padding: 0 15px;
+    }
+
+    .profile-text {
+        display: none;
+    }
+
+    .suggestion-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .stakeholder-grid,
+    .factor-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .priority-hero {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media(max-width: 500px) {
+    .kpi-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stakeholder-grid,
+    .factor-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .login-card {
+        padding: 25px;
+    }
+
+    .login-right {
+        padding: 15px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =======================================================
+     LOGIN PAGE
+======================================================= -->
+
+<section id="loginPage">
+
+    <div class="login-left">
+
+        <div class="brand">
+            <div class="brand-icon">CL</div>
+            CivicLens
+        </div>
+
+        <div class="login-copy">
+
+            <h1>
+                Turn public voice into
+                <span>policy insight.</span>
+            </h1>
+
+            <p>
+                Analyze citizen feedback at scale with transparent,
+                AI-assisted decision support designed for evidence-based
+                public policy.
+            </p>
+
+            <div class="feature-list">
+
+                <div class="feature">
+                    <div class="feature-check">✓</div>
+                    AI-assisted feedback analysis
+                </div>
+
+                <div class="feature">
+                    <div class="feature-check">✓</div>
+                    Evidence-backed prioritization
+                </div>
+
+                <div class="feature">
+                    <div class="feature-check">✓</div>
+                    Human-controlled policy decisions
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="login-right">
+
+        <div class="login-card">
+
+            <h2>Official Sign In</h2>
+
+            <p class="subtitle">
+                Access the CivicLens decision-support workspace.
+            </p>
+
+            <div class="form-group">
+                <label>Official ID</label>
+                <input
+                    id="email"
+                    class="form-control"
+                    value="demo@gov.in"
+                    placeholder="Enter official ID"
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input
+                    id="password"
+                    type="password"
+                    class="form-control"
+                    value="demo123"
+                    placeholder="Enter password"
+                >
+            </div>
+
+            <div class="login-options">
+
+                <label>
+                    <input type="checkbox" checked>
+                    Remember me
+                </label>
+
+                <span>Authorized personnel only</span>
+
+            </div>
+
+            <button class="btn btn-primary" onclick="login()">
+                Sign In →
+            </button>
+
+            <div class="demo-box">
+
+                <strong>Demo Account</strong><br><br>
+
+                Official ID: demo@gov.in<br>
+                Password: demo123
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     APPLICATION
+======================================================= -->
+
+<div id="app">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="sidebar-brand">
+
+            <div class="brand-icon">CL</div>
+
+            CivicLens
+
+        </div>
+
+        <nav class="nav">
+
+            <div class="nav-section">Overview</div>
+
+            <button class="nav-item active"
+                    onclick="showPage('dashboard', this)">
+                <span class="nav-icon">⌂</span>
+                Dashboard
+            </button>
+
+            <button class="nav-item"
+                    onclick="showPage('feedback', this)">
+                <span class="nav-icon">◫</span>
+                Feedback
+            </button>
+
+            <button class="nav-item"
+                    onclick="showPage('suggestions', this)">
+                <span class="nav-icon">✦</span>
+                Suggestions
+            </button>
+
+            <button class="nav-item"
+                    onclick="showPage('priority', this)">
+                <span class="nav-icon">◆</span>
+                Priority
+            </button>
+
+            <div class="nav-section">Analysis</div>
+
+            <button class="nav-item"
+                    onclick="showPage('stakeholders', this)">
+                <span class="nav-icon">◎</span>
+                Stakeholders
+            </button>
+
+            <button class="nav-item"
+                    onclick="showPage('impact', this)">
+                <span class="nav-icon">◈</span>
+                Impact Assessment
+            </button>
+
+            <button class="nav-item"
+                    onclick="showPage('evidence', this)">
+                <span class="nav-icon">▤</span>
+                Evidence
+            </button>
+
+            <div class="nav-section">Management</div>
+
+            <button class="nav-item"
+                    onclick="showPage('reports', this)">
+                <span class="nav-icon">▥</span>
+                Reports
+            </button>
+
+            <button class="nav-item"
+                    onclick="showPage('settings', this)">
+                <span class="nav-icon">⚙</span>
+                Settings
+            </button>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="department">
+
+                <small>Department</small>
+
+                <strong>Public Policy Division</strong>
+
+            </div>
+
+            <button class="logout" onclick="logout()">
+                ↪ Logout
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <button
+                class="icon-btn mobile-menu"
+                onclick="toggleSidebar()">
+                ☰
+            </button>
+
+            <div></div>
+
+            <div class="topbar-right">
+
+                <button class="icon-btn"
+                        onclick="showToast('You have 4 new notifications')">
+                    ♢
+                </button>
+
+                <div class="profile">
+
+                    <div class="avatar">OD</div>
+
+                    <div class="profile-text">
+
+                        <small>Government Official</small>
+
+                        <strong>Officer Demo</strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             DASHBOARD
+        ================================================= -->
+
+        <section id="dashboard" class="page">
+
+            <div class="page-header">
+
+                <div>
+
+                    <h1>Good morning, Officer</h1>
+
+                    <p>
+                        Latest overview of public feedback and policy priorities.
+                    </p>
+
+                </div>
+
+                <button
+                    class="btn btn-secondary"
+                    onclick="showToast('Dashboard refreshed')">
+                    ↻ Refresh
+                </button>
+
+            </div>
+
+
+            <div class="kpi-grid">
+
+                <div class="card kpi">
+
+                    <div class="kpi-top">
+
+                        <div>
+                            <p>Total Feedback</p>
+                            <h2>48,726</h2>
+                            <p class="positive">↑ 12.4% this month</p>
+                        </div>
+
+                        <div class="kpi-icon">◫</div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card kpi">
+
+                    <div class="kpi-top">
+
+                        <div>
+                            <p>Actionable Suggestions</p>
+                            <h2>3,842</h2>
+                            <p>7.8% of total feedback</p>
+                        </div>
+
+                        <div class="kpi-icon">✦</div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card kpi">
+
+                    <div class="kpi-top">
+
+                        <div>
+                            <p>High Priority</p>
+                            <h2>126</h2>
+                            <p class="positive">Requires review</p>
+                        </div>
+
+                        <div class="kpi-icon">◆</div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card kpi">
+
+                    <div class="kpi-top">
+
+                        <div>
+                            <p>Observed Support</p>
+                            <h2>68.4%</h2>
+                            <p>Across active suggestions</p>
+                        </div>
+
+                        <div class="kpi-icon">◎</div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-grid">
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <h3>Public Feedback Over Time</h3>
+
+                        <span class="badge badge-blue">
+                            Last 6 months
+                        </span>
+
+                    </div>
+
+                    <div class="chart">
+
+                        <div class="fake-chart">
+
+                            <div class="bar" style="height:45%"></div>
+                            <div class="bar" style="height:53%"></div>
+                            <div class="bar" style="height:62%"></div>
+                            <div class="bar" style="height:73%"></div>
+                            <div class="bar" style="height:83%"></div>
+                            <div class="bar" style="height:98%"></div>
+
+                        </div>
+
+                        <div class="chart-labels">
+
+                            <span>Jan</span>
+                            <span>Feb</span>
+                            <span>Mar</span>
+                            <span>Apr</span>
+                            <span>May</span>
+                            <span>Jun</span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <h3>Feedback by Policy Area</h3>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="donut-wrap">
+
+                            <div class="donut"></div>
+
+                            <div class="legend">
+
+                                <div class="legend-row">
+                                    <span class="dot" style="background:#2457e6"></span>
+                                    Transportation — 28%
+                                </div>
+
+                                <div class="legend-row">
+                                    <span class="dot" style="background:#14966b"></span>
+                                    Healthcare — 22%
+                                </div>
+
+                                <div class="legend-row">
+                                    <span class="dot" style="background:#e6a329"></span>
+                                    Education — 18%
+                                </div>
+
+                                <div class="legend-row">
+                                    <span class="dot" style="background:#7c5ce0"></span>
+                                    Infrastructure — 16%
+                                </div>
+
+                                <div class="legend-row">
+                                    <span class="dot" style="background:#ec6b86"></span>
+                                    Environment — 10%
+                                </div>
+
+                                <div class="legend-row">
+                                    <span class="dot" style="background:#d9dee7"></span>
+                                    Other — 6%
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <h3>Top Suggestions Requiring Attention</h3>
+
+                    <button
+                        class="btn btn-secondary"
+                        onclick="showPage('suggestions')">
+                        View all
+                    </button>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="suggestion-list">
+
+                        <div class="suggestion-row">
+
+                            <div>
+
+                                <div class="suggestion-title">
+                                    Increase peak-hour public bus frequency
+                                </div>
+
+                                <div class="suggestion-meta">
+                                    Transportation · 8,420 related responses
+                                </div>
+
+                            </div>
+
+                            <span class="badge badge-green">
+                                72% support
+                            </span>
+
+                            <div class="score">89</div>
+
+                            <button
+                                class="btn btn-secondary"
+                                onclick="showPage('priority')">
+                                View Analysis
+                            </button>
+
+                        </div>
+
+
+                        <div class="suggestion-row">
+
+                            <div>
+
+                                <div class="suggestion-title">
+                                    Improve government hospital waiting time
+                                </div>
+
+                                <div class="suggestion-meta">
+                                    Healthcare · 6,280 related responses
+                                </div>
+
+                            </div>
+
+                            <span class="badge badge-green">
+                                81% support
+                            </span>
+
+                            <div class="score">86</div>
+
+                            <button
+                                class="btn btn-secondary"
+                                onclick="showPage('priority')">
+                                View Analysis
+                            </button>
+
+                        </div>
+
+
+                        <div class="suggestion-row">
+
+                            <div>
+
+                                <div class="suggestion-title">
+                                    Improve street lighting near schools
+                                </div>
+
+                                <div class="suggestion-meta">
+                                    Infrastructure · 4,910 related responses
+                                </div>
+
+                            </div>
+
+                            <span class="badge badge-green">
+                                76% support
+                            </span>
+
+                            <div class="score">82</div>
+
+                            <button
+                                class="btn btn-secondary"
+                                onclick="showPage('priority')">
+                                View Analysis
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <br>
+
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <h3>AI Analysis Activity</h3>
+
+                    <span class="badge badge-blue">
+                        AI-assisted analysis
+                    </span>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="suggestion-list">
+
+                        <div class="suggestion-row">
+                            <div>
+                                <strong>48,726</strong>
+                                <div class="suggestion-meta">
+                                    responses processed
+                                </div>
+                            </div>
+                            <span class="badge badge-green">Completed</span>
+                        </div>
+
+                        <div class="suggestion-row">
+                            <div>
+                                <strong>3,842</strong>
+                                <div class="suggestion-meta">
+                                    suggestions extracted
+                                </div>
+                            </div>
+                            <span class="badge badge-green">Completed</span>
+                        </div>
+
+                        <div class="suggestion-row">
+                            <div>
+                                <strong>612</strong>
+                                <div class="suggestion-meta">
+                                    suggestion clusters created
+                                </div>
+                            </div>
+                            <span class="badge badge-green">Completed</span>
+                        </div>
+
+                        <div class="suggestion-row">
+                            <div>
+                                <strong>126</strong>
+                                <div class="suggestion-meta">
+                                    high-priority suggestions identified
+                                </div>
+                            </div>
+                            <span class="badge badge-yellow">Review</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             FEEDBACK
+        ================================================= -->
+
+        <section id="feedback" class="page" style="display:none">
+
+            <div class="page-header">
+
+                <div>
+
+                    <h1>Citizen Feedback</h1>
+
+                    <p>
+                        Review and analyze submitted public responses.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="toolbar">
+
+                <div class="search">
+
+                    <span class="search-icon">⌕</span>
+
+                    <input
+                        id="feedbackSearch"
+                        onkeyup="filterFeedback()"
+                        placeholder="Search feedback..."
+                    >
+
+                </div>
+
+                <select class="form-control" style="width:170px">
+                    <option>All Categories</option>
+                    <option>Transportation</option>
+                    <option>Healthcare</option>
+                    <option>Education</option>
+                    <option>Infrastructure</option>
+                </select>
+
+                <select class="form-control" style="width:150px">
+                    <option>All Stances</option>
+                    <option>Support</option>
+                    <option>Oppose</option>
+                    <option>Neutral</option>
+                </select>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="table-wrap">
+
+                    <table id="feedbackTable">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>ID</th>
+                                <th>Citizen Response</th>
+                                <th>Category</th>
+                                <th>Extracted Suggestion</th>
+                                <th>Stance</th>
+                                <th>Stakeholder</th>
+                                <th>Status</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr onclick="openFeedback()">
+
+                                <td><strong>CF-10428</strong></td>
+
+                                <td>
+                                    Bus services are overcrowded every morning.
+                                    Please increase buses between 7 and 9 AM.
+                                </td>
+
+                                <td>Transportation</td>
+
+                                <td>Increase peak-hour bus frequency</td>
+
+                                <td>
+                                    <span class="badge badge-green">
+                                        Support
+                                    </span>
+                                </td>
+
+                                <td>Students</td>
+
+                                <td>
+                                    <span class="badge badge-blue">
+                                        Analyzed
+                                    </span>
+                                </td>
+
+                            </tr>
+
+
+                            <tr onclick="openFeedback()">
+
+                                <td><strong>CF-10431</strong></td>
+
+                                <td>
+                                    Hospital waiting times are too long.
+                                    More counters should be available.
+                                </td>
+
+                                <td>Healthcare</td>
+
+                                <td>Reduce hospital waiting time</td>
+
+                                <td>
+                                    <span class="badge badge-green">
+                                        Support
+                                    </span>
+                                </td>
+
+                                <td>Patients</td>
+
+                                <td>
+                                    <span class="badge badge-blue">
+                                        Analyzed
+                                    </span>
+                                </td>
+
+                            </tr>
+
+
+                            <tr onclick="openFeedback()">
+
+                                <td><strong>CF-10452</strong></td>
+
+                                <td>
+                                    Adding more buses may increase operational
+                                    costs significantly.
+                                </td>
+
+                                <td>Transportation</td>
+
+                                <td>Increase peak-hour bus frequency</td>
+
+                                <td>
+                                    <span class="badge badge-red">
+                                        Oppose
+                                    </span>
+                                </td>
+
+                                <td>Bus Operators</td>
+
+                                <td>
+                                    <span class="badge badge-yellow">
+                                        Review
+                                    </span>
+                                </td>
+
+                            </tr>
+
+
+                            <tr onclick="openFeedback()">
+
+                                <td><strong>CF-10512</strong></td>
+
+                                <td>
+                                    Street lights near our school are not working
+                                    properly at night.
+                                </td>
+
+                                <td>Infrastructure</td>
+
+                                <td>Improve school-area lighting</td>
+
+                                <td>
+                                    <span class="badge badge-green">
+                                        Support
+                                    </span>
+                                </td>
+
+                                <td>Students</td>
+
+                                <td>
+                                    <span class="badge badge-blue">
+                                        Analyzed
+                                    </span>
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             SUGGESTIONS
+        ================================================= -->
+
+        <section id="suggestions" class="page" style="display:none">
+
+            <div class="page-header">
+
+                <div>
+
+                    <h1>Suggestion Intelligence</h1>
+
+                    <p>
+                        AI-assisted grouping and analysis of citizen demands.
+                    </p>
+
+                </div>
+
+                <span class="badge badge-blue">
+                    612 clusters
+                </span>
+
+            </div>
+
+
+            <div class="suggestion-list">
+
+                <div class="card">
+
+                    <div class="card-body">
+
+                        <div class="suggestion-row">
+
+                            <div>
+
+                                <div class="suggestion-title">
+                                    Increase peak-hour bus frequency
+                                </div>
+
+                                <div class="suggestion-meta">
+                                    Transportation · 8,420 related responses
+                                </div>
+
+                            </div>
+
+                            <div>
+                                <span class="badge badge-green">72% Support</span>
+                            </div>
+
+                            <div>
+                                <span class="badge badge-red">11% Oppose</span>
+                            </div>
+
+                            <div class="score">89/100</div>
+
+                            <button
+                                class="btn btn-primary"
+                                onclick="showPage('priority')">
+                                Full Analysis
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-body">
+
+                        <div class="suggestion-row">
+
+                            <div>
+
+                                <div class="suggestion-title">
+                                    Improve government hospital waiting time
+                                </div>
+
+                                <div class="suggestion-meta">
+                                    Healthcare · 6,280 related responses
+                                </div>
+
+                            </div>
+
+                            <div>
+                                <span class="badge badge-green">81% Support</span>
+                            </div>
+
+                            <div>
+                                <span class="badge badge-red">7% Oppose</span>
+                            </div>
+
+                            <div class="score">86/100</div>
+
+                            <button
+                                class="btn btn-primary"
+                                onclick="showPage('priority')">
+                                Full Analysis
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-body">
+
+                        <div class="suggestion-row">
+
+                            <div>
+
+                                <div class="suggestion-title">
+                                    Improve street lighting near schools
+                                </div>
+
+                                <div class="suggestion-meta">
+                                    Infrastructure · 4,910 related responses
+                                </div>
+
+                            </div>
+
+                            <div>
+                                <span class="badge badge-green">76% Support</span>
+                            </div>
+
+                            <div>
+                                <span class="badge badge-red">9% Oppose</span>
+                            </div>
+
+                            <div class="score">82/100</div>
+
+                            <button
+                                class="btn btn-primary"
+                                onclick="showPage('priority')">
+                                Full Analysis
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             PRIORITY
+        ================================================= -->
+
+        <section id="priority" class="page" style="display:none">
+
+            <div class="page-header">
+
+                <div>
+
+                    <h1>Priority Analysis</h1>
+
+                    <p>
+                        Transparent, explainable prioritization of public suggestions.
+                    </p>
+
+                </div>
+
+                <button class="btn btn-secondary"
+                        onclick="openWeights()">
+                    Adjust Weights
+                </button>
+
+            </div>
+
+
+            <div class="card" style="margin-bottom:18px">
+
+                <div class="card-body">
+
+                    <div class="priority-hero">
+
+                        <div class="priority-number">
+                            89
+                        </div>
+
+                        <div class="priority-info">
+
+                            <span class="badge badge-red">
+                                HIGH PRIORITY
+                            </span>
+
+                            <h2>
+                                Increase Peak-Hour Bus Frequency
+                            </h2>
+
+                            <p>
+                                Transportation Policy · 8,420 related responses
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="factor-grid">
+
+                        <div class="factor">
+                            <small>Public Support</small>
+                            <strong>72%</strong>
+                            <span>Weight 30%</span>
+                        </div>
+
+                        <div class="factor">
+                            <small>Urgency</small>
+                            <strong>High</strong>
+                            <span>Weight 20%</span>
+                        </div>
+
+                        <div class="factor">
+                            <small>Potential Impact</small>
+                            <strong>High</strong>
+                            <span>Weight 20%</span>
+                        </div>
+
+                        <div class="factor">
+                            <small>Feasibility</small>
+                            <strong>Medium</strong>
+                            <span>Weight 15%</span>
+                        </div>
+
+                        <div class="factor">
+                            <small>Affected Population</small>
+                            <strong>High</strong>
+                            <span>Weight 15%</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="detail-grid">
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <h3>Observed Response Stance</h3>
+
+                        <span class="badge badge-blue">
+                            8,420 responses
+                        </span>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="stance-chart">
+                            <div class="stance-support"></div>
+                            <div class="stance-oppose"></div>
+                            <div class="stance-neutral"></div>
+                        </div>
+
+                        <div class="stance-legend">
+
+                            <div class="stance-item">
+                                <span>● Support</span>
+                                <strong>72%</strong>
+                            </div>
+
+                            <div class="stance-item">
+                                <span>● Oppose</span>
+                                <strong>11%</strong>
+                            </div>
+
+                            <div class="stance-item">
+                                <span>● Neutral</span>
+                                <strong>17%</strong>
+                            </div>
+
+                        </div>
+
+                        <div class="scenario-estimate">
+
+                            <h3>Important interpretation</h3>
+
+                            <p>
+                                Support represents the stance expressed in submitted
+                                responses. It does not claim to represent the opinion
+                                of the entire population.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <h3>Priority Calculation</h3>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <p style="font-size:13px;line-height:1.7;color:#667085">
+
+                            Priority Score =
+                            Public Support × 30% +
+                            Urgency × 20% +
+                            Impact × 20% +
+                            Feasibility × 15% +
+                            Affected Population × 15%
+
+                        </p>
+
+                        <br>
+
+                        <div style="display:grid;gap:14px">
+
+                            <div>
+                                <div style="display:flex;justify-content:space-between;font-size:11px">
+                                    <span>Public Support</span>
+                                    <strong>30%</strong>
+                                </div>
+
+                                <div class="progress">
+                                    <div class="progress-bar" style="width:30%"></div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div style="display:flex;justify-content:space-between;font-size:11px">
+                                    <span>Urgency</span>
+                                    <strong>20%</strong>
+                                </div>
+
+                                <div class="progress">
+                                    <div class="progress-bar" style="width:20%"></div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div style="display:flex;justify-content:space-between;font-size:11px">
+                                    <span>Impact</span>
+                                    <strong>20%</strong>
+                                </div>
+
+                                <div class="progress">
+                                    <div class="progress-bar" style="width:20%"></div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div style="display:flex;justify-content:space-between;font-size:11px">
+                                    <span>Feasibility</span>
+                                    <strong>15%</strong>
+                                </div>
+
+                                <div class="progress">
+                                    <div class="progress-bar" style="width:15%"></div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <br>
+
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <h3>Evidence-backed Recommendation</h3>
+
+                    <span class="badge badge-blue">
+                        AI-assisted
+                    </span>
+
+                </div>
+
+                <div class="card-body">
+
+                    <p style="font-size:13px;line-height:1.7;color:#596579">
+
+                        This suggestion received a high priority because it has
+                        substantial observed support, high reported urgency,
+                        significant potential impact and a large affected population.
+                        Implementation feasibility is currently assessed as medium.
+
+                    </p>
+
+                    <br>
+
+                    <button class="btn btn-primary"
+                            onclick="showPage('impact')">
+                        Explore Policy Scenario →
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             STAKEHOLDERS
+        ================================================= -->
+
+        <section id="stakeholders" class="page" style="display:none">
+
+            <div class="page-header">
+
+                <div>
+
+                    <h1>Affected Stakeholders</h1>
+
+                    <p>
+                        Groups potentially affected by the selected suggestion.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-body">
+
+                    <div class="stakeholder-grid">
+
+                        <div class="stakeholder">
+
+                            <div class="stakeholder-icon">🎓</div>
+
+                            <strong>Students</strong>
+
+                            <span>High impact</span>
+
+                        </div>
+
+                        <div class="stakeholder">
+
+                            <div class="stakeholder-icon">💼</div>
+
+                            <strong>Workers</strong>
+
+                            <span>High impact</span>
+
+                        </div>
+
+                        <div class="stakeholder">
+
+                            <div class="stakeholder-icon">👨‍👩‍👧</div>
+
+                            <strong>Parents</strong>
+
+                            <span>Medium impact</span>
+
+                        </div>
+
+                        <div class="stakeholder">
+
+                            <div class="stakeholder-icon">🏛</div>
+
+                            <strong>Transport Department</strong>
+
+                            <span>High implementation impact</span>
+
+                        </div>
+
+                        <div class="stakeholder">
+
+                            <div class="stakeholder-icon">🚌</div>
+
+                            <strong>Bus Operators</strong>
+
+                            <span>Medium impact</span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <br>
+
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <h3>Stakeholder Impact Matrix</h3>
+
+                </div>
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Stakeholder</th>
+                                <th>Benefit</th>
+                                <th>Cost</th>
+                                <th>Implementation Impact</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+                                <td>Students</td>
+                                <td><span class="badge badge-green">High</span></td>
+                                <td><span class="badge badge-blue">Low</span></td>
+                                <td><span class="badge badge-yellow">Medium</span></td>
+                            </tr>
+
+                            <tr>
+                                <td>Workers</td>
+                                <td><span class="badge badge-green">High</span></td>
+                                <td><span class="badge badge-blue">Low</span></td>
+                                <td><span class="badge badge-yellow">Medium</span></td>
+                            </tr>
+
+                            <tr>
+                                <td>Transport Department</td>
+                                <td><span class="badge badge-green">High</span></td>
+                                <td><span class="badge badge-red">High</span></td>
+                                <td><span class="badge badge-red">High</span></td>
+                            </tr>
+
+                            <tr>
+                                <td>Bus Operators</td>
+                                <td><span class="badge badge-yellow">Medium</span></td>
+                                <td><span class="badge badge-red">High</span></td>
+                                <td><span class="badge badge-yellow">Medium</span></td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             EVIDENCE
+        ================================================= -->
+
+        <section id="evidence" class="page" style="display:none">
+
+            <div class="page-header">
+
+                <div>
+
+                    <h1>Citizen Evidence</h1>
+
+                    <p>
+                        Representative feedback supporting the analysis.
+                    </p>
+
+                </div>
+
+                <span class="badge badge-blue">
+                    Evidence-backed
+                </span>
+
+            </div>
+
+
+            <div class="detail-grid">
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <h3>Supporting Responses</h3>
+
+                        <span class="badge badge-green">72% support</span>
+
+                    </div>
+
+                    <div class="card-body evidence-grid">
+
+                        <div class="evidence">
+
+                            <p>
+                                "Morning buses are extremely crowded and
+                                students often reach school late."
+                            </p>
+
+                            <div class="evidence-footer">
+
+                                <span class="badge badge-blue">Student</span>
+                                <span class="badge badge-green">Support</span>
+                                <span class="badge badge-blue">92% relevance</span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="evidence">
+
+                            <p>
+                                "There should be more buses between 7 and 9 AM."
+                            </p>
+
+                            <div class="evidence-footer">
+
+                                <span class="badge badge-blue">Parent</span>
+                                <span class="badge badge-green">Support</span>
+                                <span class="badge badge-blue">89% relevance</span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="evidence">
+
+                            <p>
+                                "Workers are unable to reach offices on time
+                                because of overcrowding."
+                            </p>
+
+                            <div class="evidence-footer">
+
+                                <span class="badge badge-blue">Worker</span>
+                                <span class="badge badge-green">Support</span>
+                                <span class="badge badge-blue">87% relevance</span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <h3>Concerns / Opposition</h3>
+
+                        <span class="badge badge-red">11% oppose</span>
+
+                    </div>
+
+                    <div class="card-body evidence-grid">
+
+                        <div class="evidence">
+
+                            <p>
+                                "Adding more buses could increase operating
+                                costs significantly."
+                            </p>
+
+                            <div class="evidence-footer">
+
+                                <span class="badge badge-blue">Operator</span>
+                                <span class="badge badge-red">Oppose</span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="evidence">
+
+                            <p>
+                                "Existing routes may need optimization before
+                                adding additional buses."
+                            </p>
+
+                            <div class="evidence-footer">
+
+                                <span class="badge badge-blue">Transport</span>
+                                <span class="badge badge-yellow">Concern</span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <br>
+
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <h3>Semantic Suggestion Cluster</h3>
+
+                    <span class="badge badge-blue">
+                        AI-assisted grouping
+                    </span>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div style="
+                        background:#f7f9fc;
+                        border:1px solid #e7ebf2;
+                        padding:20px;
+                        border-radius:13px;
+                    ">
+
+                        <h3 style="font-size:18px">
+                            Increase peak-hour bus frequency
+                        </h3>
+
+                        <p style="
+                            color:#718096;
+                            font-size:12px;
+                            margin-top:6px;
+                        ">
+                            8,420 semantically similar responses
+                        </p>
+
+                    </div>
+
+                    <br>
+
+                    <p style="
+                        font-size:12px;
+                        color:#718096;
+                    ">
+
+                        Similar responses are grouped based on semantic meaning,
+                        rather than exact keyword matching.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             IMPACT ASSESSMENT
+        ================================================= -->
+
+        <section id="impact" class="page" style="display:none">
+
+            <div class="page-header">
+
+                <div>
+
+                    <h1>Policy Scenario Assessment</h1>
+
+                    <p>
+                        Explore potential consequences using evidence and configured assumptions.
+                    </p>
+
+                </div>
+
+                <span class="badge badge-yellow">
+                    Scenario Estimate
+                </span>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-body">
+
+                    <div class="scenario-tabs">
+
+                        <button
+                            class="scenario-tab active"
+                            onclick="scenario('accept', this)">
+                            ACCEPT
+                        </button>
+
+                        <button
+                            class="scenario-tab"
+                            onclick="scenario('modify', this)">
+                            MODIFY
+                        </button>
+
+                        <button
+                            class="scenario-tab"
+                            onclick="scenario('reject', this)">
+                            REJECT
+                        </button>
+
+                    </div>
+
+
+                    <div id="acceptScenario">
+
+                        <div class="impact-grid">
+
+                            <div class="impact-card">
+
+                                <h3>Potential Benefits</h3>
+
+                                <ul>
+
+                                    <li>Reduced peak-hour overcrowding</li>
+                                    <li>Improved public transport accessibility</li>
+                                    <li>Potentially shorter waiting times</li>
+                                    <li>Benefits students and workers</li>
+
+                                </ul>
+
+                            </div>
+
+
+                            <div class="impact-card">
+
+                                <h3>Implementation Requirements</h3>
+
+                                <ul>
+
+                                    <li>Additional buses</li>
+                                    <li>Driver availability</li>
+                                    <li>Route capacity assessment</li>
+                                    <li>Maintenance resources</li>
+
+                                </ul>
+
+                            </div>
+
+
+                            <div class="impact-card">
+
+                                <h3>Potential Risks</h3>
+
+                                <ul>
+
+                                    <li>Increased operating cost</li>
+                                    <li>Infrastructure limitations</li>
+                                    <li>Additional staffing requirements</li>
+                                    <li>Route congestion</li>
+
+                                </ul>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div id="modifyScenario" style="display:none">
+
+                        <div style="max-width:550px">
+
+                            <label style="
+                                font-size:12px;
+                                font-weight:800;
+                                display:block;
+                                margin-bottom:8px;
+                            ">
+                                Proposed bus increase
+                            </label>
+
+                            <input
+                                id="busRange"
+                                type="range"
+                                min="10"
+                                max="50"
+                                value="20"
+                                style="width:100%"
+                                oninput="updateScenario()"
+                            >
+
+                            <div style="
+                                display:flex;
+                                justify-content:space-between;
+                                margin-top:8px;
+                                font-size:12px;
+                            ">
+
+                                <span>10%</span>
+
+                                <strong id="rangeValue">20%</strong>
+
+                                <span>50%</span>
+
+                            </div>
+
+
+                            <br>
+
+                            <label style="
+                                font-size:12px;
+                                font-weight:800;
+                                display:block;
+                                margin-bottom:8px;
+                            ">
+                                Estimated operating budget
+                            </label>
+
+                            <input
+                                class="form-control"
+                                placeholder="₹ Enter estimated budget"
+                            >
+
+                            <br>
+
+                            <label style="
+                                font-size:12px;
+                                font-weight:800;
+                                display:block;
+                                margin-bottom:8px;
+                            ">
+                                Implementation period
+                            </label>
+
+                            <input
+                                class="form-control"
+                                placeholder="Enter months"
+                            >
+
+                        </div>
+
+
+                        <div class="scenario-estimate">
+
+                            <h3>Scenario Estimate</h3>
+
+                            <p id="scenarioText">
+                                A 20% increase may provide additional peak-hour
+                                capacity but could require additional drivers,
+                                buses and operating resources.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div id="rejectScenario" style="display:none">
+
+                        <div class="impact-grid">
+
+                            <div class="impact-card">
+
+                                <h3>Potential Unresolved Issues</h3>
+
+                                <ul>
+
+                                    <li>Morning overcrowding may remain</li>
+                                    <li>Citizen demand remains unaddressed</li>
+                                    <li>Student waiting times may continue</li>
+                                    <li>Existing complaints may persist</li>
+
+                                </ul>
+
+                            </div>
+
+                            <div class="impact-card">
+
+                                <h3>Evidence</h3>
+
+                                <ul>
+
+                                    <li>8,420 related responses</li>
+                                    <li>72% observed support</li>
+                                    <li>High reported urgency</li>
+                                    <li>Large affected population</li>
+
+                                </ul>
+
+                            </div>
+
+                            <div class="impact-card">
+
+                                <h3>Alternative Action</h3>
+
+                                <ul>
+
+                                    <li>Optimize existing routes</li>
+                                    <li>Review peak-hour schedules</li>
+                                    <li>Conduct transport capacity study</li>
+                                    <li>Evaluate targeted bus deployment</li>
+
+                                </ul>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="scenario-estimate">
+
+                        <h3>Decision Support Only</h3>
+
+                        <p>
+                            Scenario results are estimates based on available feedback,
+                            configured assumptions and analytical rules. They are not
+                            guaranteed predictions. Final policy decisions remain with
+                            authorized officials.
+                        </p>
+
+                    </div>
+
+
+                    <br>
+
+                    <div style="
+                        display:flex;
+                        gap:10px;
+                        flex-wrap:wrap;
+                    ">
+
+                        <button
+                            class="btn btn-primary"
+                            onclick="makeDecision('Approved for Further Review')">
+                            ✓ Approve for Further Review
+                        </button>
+
+                        <button
+                            class="btn btn-secondary"
+                            onclick="makeDecision('Modification Requested')">
+                            Request Modification
+                        </button>
+
+                        <button
+                            class="btn"
+                            style="
+                                background:#fff0f2;
+                                color:#d94c5c;
+                            "
+                            onclick="makeDecision('Rejected')">
+                            Reject
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             REPORTS
+        ================================================= -->
+
+        <section id="reports" class="page" style="display:none">
+
+            <div class="page-header">
+
+                <div>
+
+                    <h1>Policy Reports</h1>
+
+                    <p>
+                        Generated analysis reports for active consultations.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="impact-grid">
+
+                <div class="card">
+
+                    <div class="card-body">
+
+                        <span class="badge badge-blue">
+                            Transportation
+                        </span>
+
+                        <h3 style="margin-top:15px">
+                            Transportation Feedback Analysis
+                        </h3>
+
+                        <p style="
+                            color:#718096;
+                            font-size:12px;
+                            margin-top:8px;
+                        ">
+                            48,726 responses · Updated today
+                        </p>
+
+                        <br>
+
+                        <button
+                            class="btn btn-primary"
+                            onclick="exportReport('Transportation')">
+                            Export Report
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-body">
+
+                        <span class="badge badge-green">
+                            Healthcare
+                        </span>
+
+                        <h3 style="margin-top:15px">
+                            Healthcare Service Feedback
+                        </h3>
+
+                        <p style="
+                            color:#718096;
+                            font-size:12px;
+                            margin-top:8px;
+                        ">
+                            31,420 responses · Updated yesterday
+                        </p>
+
+                        <br>
+
+                        <button
+                            class="btn btn-primary"
+                            onclick="exportReport('Healthcare')">
+                            Export Report
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-body">
+
+                        <span class="badge badge-yellow">
+                            Education
+                        </span>
+
+                        <h3 style="margin-top:15px">
+                            Education Policy Consultation
+                        </h3>
+
+                        <p style="
+                            color:#718096;
+                            font-size:12px;
+                            margin-top:8px;
+                        ">
+                            24,810 responses · Updated 2 days ago
+                        </p>
+
+                        <br>
+
+                        <button
+                            class="btn btn-primary"
+                            onclick="exportReport('Education')">
+                            Export Report
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <br>
+
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <h3>Audit Trail</h3>
+
+                </div>
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Time</th>
+                                <th>Official</th>
+                                <th>Action</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="auditTable">
+
+                            <tr>
+                                <td>10:42 AM</td>
+                                <td>Officer Demo</td>
+                                <td>Reviewed suggestion #17</td>
+                            </tr>
+
+                            <tr>
+                                <td>10:48 AM</td>
+                                <td>Officer Demo</td>
+                                <td>Adjusted priority weights</td>
+                            </tr>
+
+                            <tr>
+                                <td>11:02 AM</td>
+                                <td>Officer Demo</td>
+                                <td>Opened policy scenario assessment</td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             SETTINGS
+        ================================================= -->
+
+        <section id="settings" class="page" style="display:none">
+
+            <div class="page-header">
+
+                <div>
+
+                    <h1>Settings</h1>
+
+                    <p>
+                        Configure prioritization and AI review preferences.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="card" style="max-width:850px">
+
+                <div class="card-header">
+
+                    <h3>Priority Configuration</h3>
+
+                    <span id="weightStatus"
+                          class="badge badge-green">
+                        Total: 100%
+                    </span>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="setting-row">
+
+                        <div>
+                            <strong>Public Support</strong>
+                            <p>Observed support in submitted responses.</p>
+                        </div>
+
+                        <input
+                            class="weight-input"
+                            id="weight1"
+                            value="30"
+                            oninput="calculateWeights()"
+                        >
+
+                    </div>
+
+
+                    <div class="setting-row">
+
+                        <div>
+                            <strong>Urgency</strong>
+                            <p>AI-assisted urgency classification.</p>
+                        </div>
+
+                        <input
+                            class="weight-input"
+                            id="weight2"
+                            value="20"
+                            oninput="calculateWeights()"
+                        >
+
+                    </div>
+
+
+                    <div class="setting-row">
+
+                        <div>
+                            <strong>Potential Impact</strong>
+                            <p>Potential social impact assessment.</p>
+                        </div>
+
+                        <input
+                            class="weight-input"
+                            id="weight3"
+                            value="20"
+                            oninput="calculateWeights()"
+                        >
+
+                    </div>
+
+
+                    <div class="setting-row">
+
+                        <div>
+                            <strong>Feasibility</strong>
+                            <p>Preliminary implementation feasibility.</p>
+                        </div>
+
+                        <input
+                            class="weight-input"
+                            id="weight4"
+                            value="15"
+                            oninput="calculateWeights()"
+                        >
+
+                    </div>
+
+
+                    <div class="setting-row">
+
+                        <div>
+                            <strong>Affected Population</strong>
+                            <p>Estimated breadth of affected stakeholders.</p>
+                        </div>
+
+                        <input
+                            class="weight-input"
+                            id="weight5"
+                            value="15"
+                            oninput="calculateWeights()"
+                        >
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <br>
+
+
+            <div class="card" style="max-width:850px">
+
+                <div class="card-header">
+
+                    <h3>AI Review Settings</h3>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="setting-row">
+
+                        <div>
+
+                            <strong>Low-confidence threshold</strong>
+
+                            <p>
+                                Suggestions below this confidence require human review.
+                            </p>
+
+                        </div>
+
+                        <strong>70%</strong>
+
+                    </div>
+
+
+                    <div class="setting-row">
+
+                        <div>
+
+                            <strong>Human review</strong>
+
+                            <p>
+                                Require officials to verify uncertain AI analysis.
+                            </p>
+
+                        </div>
+
+                        <span class="badge badge-green">
+                            ON
+                        </span>
+
+                    </div>
+
+
+                    <div class="setting-row">
+
+                        <div>
+
+                            <strong>Two-factor authentication</strong>
+
+                            <p>
+                                Additional security for official accounts.
+                            </p>
+
+                        </div>
+
+                        <span class="badge badge-green">
+                            ON
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+<!-- =======================================================
+     FEEDBACK MODAL
+======================================================= -->
+
+<div class="modal-bg" id="feedbackModal">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h3>Feedback CF-10428</h3>
+
+            <button
+                class="icon-btn"
+                onclick="closeModal('feedbackModal')">
+                ×
+            </button>
+
+        </div>
+
+        <div class="modal-body">
+
+            <span class="badge badge-blue">
+                Original Response
+            </span>
+
+            <p style="
+                font-size:14px;
+                line-height:1.7;
+                margin-top:12px;
+            ">
+                "Bus services are overcrowded every morning.
+                Please increase buses between 7 and 9 AM."
+            </p>
+
+            <br>
+
+            <span class="badge badge-blue">
+                AI Extracted Information
+            </span>
+
+            <div style="
+                display:grid;
+                grid-template-columns:1fr 1fr;
+                gap:10px;
+                margin-top:15px;
+            ">
+
+                <div class="factor">
+                    <small>Suggestion</small>
+                    <strong style="font-size:12px">
+                        Increase peak-hour bus frequency
+                    </strong>
+                </div>
+
+                <div class="factor">
+                    <small>Problem</small>
+                    <strong style="font-size:12px">
+                        Morning overcrowding
+                    </strong>
+                </div>
+
+                <div class="factor">
+                    <small>Time</small>
+                    <strong style="font-size:12px">
+                        7–9 AM
+                    </strong>
+                </div>
+
+                <div class="factor">
+                    <small>Category</small>
+                    <strong style="font-size:12px">
+                        Transportation
+                    </strong>
+                </div>
+
+                <div class="factor">
+                    <small>Stakeholders</small>
+                    <strong style="font-size:12px">
+                        Students, Workers, Parents
+                    </strong>
+                </div>
+
+                <div class="factor">
+                    <small>AI Confidence</small>
+                    <strong style="font-size:12px;color:#14966b">
+                        92%
+                    </strong>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+
+            <button
+                class="btn btn-secondary"
+                onclick="closeModal('feedbackModal')">
+                Close
+            </button>
+
+            <button
+                class="btn btn-primary"
+                onclick="reviewFeedback()">
+                ✓ Review AI Analysis
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     WEIGHTS MODAL
+======================================================= -->
+
+<div class="modal-bg" id="weightsModal">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h3>Adjust Priority Weights</h3>
+
+            <button
+                class="icon-btn"
+                onclick="closeModal('weightsModal')">
+                ×
+            </button>
+
+        </div>
+
+        <div class="modal-body">
+
+            <p style="
+                font-size:12px;
+                color:#718096;
+                margin-bottom:20px;
+            ">
+                Configure how each factor contributes to the priority score.
+                Total weight must equal 100%.
+            </p>
+
+            <div class="setting-row">
+                <strong>Public Support</strong>
+                <input class="weight-input" value="30">
+            </div>
+
+            <div class="setting-row">
+                <strong>Urgency</strong>
+                <input class="weight-input" value="20">
+            </div>
+
+            <div class="setting-row">
+                <strong>Impact</strong>
+                <input class="weight-input" value="20">
+            </div>
+
+            <div class="setting-row">
+                <strong>Feasibility</strong>
+                <input class="weight-input" value="15">
+            </div>
+
+            <div class="setting-row">
+                <strong>Affected Population</strong>
+                <input class="weight-input" value="15">
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+
+            <button
+                class="btn btn-secondary"
+                onclick="closeModal('weightsModal')">
+                Cancel
+            </button>
+
+            <button
+                class="btn btn-primary"
+                onclick="saveWeights()">
+                Save Weights
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+function login() {
+
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    if (
+        email === "demo@gov.in" &&
+        password === "demo123"
+    ) {
+
+        document.getElementById("loginPage").style.display = "none";
+        document.getElementById("app").style.display = "block";
+
+        showToast("Welcome to CivicLens");
+
+    } else {
+
+        showToast("Invalid demo credentials");
+
+    }
+
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+function logout() {
+
+    document.getElementById("app").style.display = "none";
+    document.getElementById("loginPage").style.display = "flex";
+
+    showToast("Logged out successfully");
+
+}
+
+
+/* =========================================================
+   PAGE NAVIGATION
+========================================================= */
+
+function showPage(pageId, clickedButton) {
+
+    const pages = document.querySelectorAll(".page");
+
+    pages.forEach(page => {
+        page.style.display = "none";
+    });
+
+    const target = document.getElementById(pageId);
+
+    if (target) {
+        target.style.display = "block";
+    }
+
+    document.querySelectorAll(".nav-item")
+        .forEach(item => item.classList.remove("active"));
+
+    if (clickedButton) {
+        clickedButton.classList.add("active");
+    }
+
+    if (window.innerWidth <= 800) {
+        document.getElementById("sidebar").classList.remove("open");
+    }
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+/* =========================================================
+   MOBILE SIDEBAR
+========================================================= */
+
+function toggleSidebar() {
+
+    document
+        .getElementById("sidebar")
+        .classList.toggle("open");
+
+}
+
+
+/* =========================================================
+   FEEDBACK MODAL
+========================================================= */
+
+function openFeedback() {
+
+    document.getElementById("feedbackModal").style.display = "grid";
+
+}
+
+function closeModal(id) {
+
+    document.getElementById(id).style.display = "none";
+
+}
+
+function reviewFeedback() {
+
+    closeModal("feedbackModal");
+
+    addAudit("Reviewed AI analysis for CF-10428");
+
+    showToast(
+        "AI analysis marked for human verification"
+    );
+
+}
+
+
+/* =========================================================
+   WEIGHTS
+========================================================= */
+
+function openWeights() {
+
+    document.getElementById("weightsModal").style.display = "grid";
+
+}
+
+function saveWeights() {
+
+    closeModal("weightsModal");
+
+    addAudit("Adjusted priority weights");
+
+    showToast("Priority weights updated");
+
+}
+
+
+/* =========================================================
+   SCENARIO
+========================================================= */
+
+function scenario(type, button) {
+
+    document
+        .querySelectorAll(".scenario-tab")
+        .forEach(tab => tab.classList.remove("active"));
+
+    button.classList.add("active");
+
+    document.getElementById("acceptScenario").style.display = "none";
+    document.getElementById("modifyScenario").style.display = "none";
+    document.getElementById("rejectScenario").style.display = "none";
+
+    if (type === "accept") {
+
+        document.getElementById("acceptScenario").style.display = "block";
+
+        addAudit("Reviewed ACCEPT policy scenario");
+
+    }
+
+    if (type === "modify") {
+
+        document.getElementById("modifyScenario").style.display = "block";
+
+        addAudit("Opened MODIFY policy scenario");
+
+    }
+
+    if (type === "reject") {
+
+        document.getElementById("rejectScenario").style.display = "block";
+
+        addAudit("Reviewed REJECT policy scenario");
+
+    }
+
+}
+
+
+/* =========================================================
+   SCENARIO SLIDER
+========================================================= */
+
+function updateScenario() {
+
+    const value =
+        document.getElementById("busRange").value;
+
+    document.getElementById("rangeValue").innerText =
+        value + "%";
+
+    document.getElementById("scenarioText").innerText =
+        "A " + value +
+        "% increase may provide additional peak-hour capacity " +
+        "but could require additional drivers, buses and operating resources.";
+
+}
+
+
+/* =========================================================
+   DECISION
+========================================================= */
+
+function makeDecision(decision) {
+
+    const confirmed =
+        confirm(
+            "Record official decision: " +
+            decision +
+            "?"
+        );
+
+    if (!confirmed) return;
+
+    addAudit("Policy decision: " + decision);
+
+    showToast(
+        "Decision recorded: " + decision
+    );
+
+}
+
+
+/* =========================================================
+   AUDIT
+========================================================= */
+
+function addAudit(action) {
+
+    const table =
+        document.getElementById("auditTable");
+
+    if (!table) return;
+
+    const row =
+        document.createElement("tr");
+
+    const now =
+        new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit"
+        });
+
+    row.innerHTML = `
+        <td>${now}</td>
+        <td>Officer Demo</td>
+        <td>${action}</td>
+    `;
+
+    table.prepend(row);
+
+}
+
+
+/* =========================================================
+   FEEDBACK SEARCH
+========================================================= */
+
+function filterFeedback() {
+
+    const search =
+        document
+            .getElementById("feedbackSearch")
+            .value
+            .toLowerCase();
+
+    const rows =
+        document.querySelectorAll(
+            "#feedbackTable tbody tr"
+        );
+
+    rows.forEach(row => {
+
+        row.style.display =
+            row.innerText
+                .toLowerCase()
+                .includes(search)
+                ? ""
+                : "none";
+
+    });
+
+}
+
+
+/* =========================================================
+   SETTINGS WEIGHTS
+========================================================= */
+
+function calculateWeights() {
+
+    const values = [
+        "weight1",
+        "weight2",
+        "weight3",
+        "weight4",
+        "weight5"
+    ].map(id =>
+        Number(document.getElementById(id).value) || 0
+    );
+
+    const total =
+        values.reduce(
+            (sum, value) => sum + value,
+            0
+        );
+
+    const status =
+        document.getElementById("weightStatus");
+
+    status.innerText =
+        "Total: " + total + "%";
+
+    if (total === 100) {
+
+        status.className =
+            "badge badge-green";
+
+    } else {
+
+        status.className =
+            "badge badge-red";
+
+    }
+
+}
+
+
+/* =========================================================
+   REPORT EXPORT
+========================================================= */
+
+function exportReport(type) {
+
+    const content =
+`CivicLens Policy Report
+
+Policy Area: ${type}
+
+Generated: ${new Date().toLocaleString()}
+
+Total Feedback: 48,726
+
+Actionable Suggestions: 3,842
+
+High Priority Suggestions: 126
+
+Observed Public Support: 68.4%
+
+Note:
+This prototype report contains simulated data for demonstration purposes.
+
+AI assists. Evidence informs. Humans decide.
+`;
+
+    const blob =
+        new Blob(
+            [content],
+            { type: "text/plain" }
+        );
+
+    const url =
+        URL.createObjectURL(blob);
+
+    const a =
+        document.createElement("a");
+
+    a.href = url;
+
+    a.download =
+        "CivicLens-" +
+        type +
+        "-Report.txt";
+
+    a.click();
+
+    URL.revokeObjectURL(url);
+
+    addAudit("Exported " + type + " policy report");
+
+    showToast("Report exported");
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(message) {
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.innerText = message;
+
+    toast.style.display = "block";
+
+    clearTimeout(window.toastTimer);
+
+    window.toastTimer =
+        setTimeout(() => {
+
+            toast.style.display = "none";
+
+        }, 2800);
+
+}
+
+
+/* =========================================================
+   ESCAPE KEY
+========================================================= */
+
+document.addEventListener("keydown", function(event) {
+
+    if (event.key === "Escape") {
+
+        document
+            .querySelectorAll(".modal-bg")
+            .forEach(modal => {
+                modal.style.display = "none";
+            });
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
+```
